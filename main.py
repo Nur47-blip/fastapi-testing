@@ -9,12 +9,15 @@ data = {"name":"shopping cart",
         "items":{}}
 
 @app.get("/")
-def root():
-    return {"message":"Welcome to Toko H8 Shopping Cart! There are some features that you can explore",
-            "menu":{1:"See shopping cart (/data)",
-                    2:"Add item (/add) - You may need request",
-                    3:"Edit shopping cart (/edit/id)",
-                    4:"Delete item from shopping cart (/del/id)"}}
+def root(api_key: str = Header(None)):
+    if api_key is None or api_key != API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid API Key. You are not allowed to add data!")
+    else:
+        return {"message":"Welcome to Toko H8 Shopping Cart! There are some features that you can explore",
+                "menu":{1:"See shopping cart (/data)",
+                        2:"Add item (/add) - You may need request",
+                        3:"Edit shopping cart (/edit/id)",
+                        4:"Delete item from shopping cart (/del/id)"}}
 
 @app.get("/cart")
 def show():
